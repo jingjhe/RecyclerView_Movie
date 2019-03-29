@@ -1,12 +1,15 @@
 package com.example.nh.recyclerview
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Parcelable
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
 import android.view.View
 import com.example.nh.adapter.ContactAdapter
+import com.example.nh.adapter.OnItemClickListener
 import com.example.nh.data.Movie
 import com.example.nh.model.MovieModel
 import kotlinx.android.synthetic.main.activity_main.*
@@ -20,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        layoutManager = LinearLayoutManager(this)
+        layoutManager = LinearLayoutManager(this) as RecyclerView.LayoutManager
         loadingData()
         doRecyclerView()
     }
@@ -43,8 +46,18 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun doRecyclerView() {
+        val listener = object : OnItemClickListener {
+            override fun onItemClick(movie: Any) {
+                movie as Movie
+                val intent = Intent(this@MainActivity, MovieInfo::class.java)
+                intent.putExtra("movie",movie)
+                startActivity(intent)
+                overridePendingTransition(R.anim.enter_from_right, R.anim.exit_to_left)
+            }
+
+        }
         recyclerView.layoutManager = layoutManager
-        recyclerView.adapter = ContactAdapter(this, arrayList, listType)
+        recyclerView.adapter = ContactAdapter(this, arrayList, listType, listener)
     }
 
     fun listTypeChanged(view: View) {

@@ -16,7 +16,8 @@ import kotlinx.android.synthetic.main.listitem_movie_stream.view.*
 class ContactAdapter(
     private val context: Context,
     private val movieList: ArrayList<Movie>,
-    private val listType: Int
+    private val listType: Int,
+    private val onItemClickListener: OnItemClickListener
 ) :
     RecyclerView.Adapter<MyViewHolder>() {
 
@@ -46,13 +47,13 @@ class ContactAdapter(
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         when (listType) {
             MovieModel.LIST_TYPE_LIST -> {
-                holder.listMovieBind(context, movieList[position])
+                holder.listMovieBind(context, movieList[position], onItemClickListener)
             }
             MovieModel.LIST_TYPE_MODULE -> {
-                holder.moduleMovieBind(context, movieList[position])
+                holder.moduleMovieBind(context, movieList[position], onItemClickListener)
             }
             MovieModel.LIST_TYPE_COVER -> {
-                holder.streamMovieBind(context, movieList[position])
+                holder.streamMovieBind(context, movieList[position], onItemClickListener)
             }
         }
     }
@@ -62,24 +63,33 @@ class ContactAdapter(
 
 class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    fun listMovieBind(context: Context, movie: Movie) {
+    fun listMovieBind(context: Context, movie: Movie, listener: OnItemClickListener) {
         itemView.movieNameList.text = "Movie Name:${movie.title}"
-        //itemView.idTv.text= "Movie Rated:${contact.id}"
         Glide.with(context).load(movie.poster_path).placeholder(R.drawable.load)
             .into(itemView.listImg)
+        itemView.setOnClickListener {
+            listener.onItemClick(movie)
+        }
 
     }
 
-    fun moduleMovieBind(context: Context, movie: Movie) {
-        itemView.movieNameModule.text=movie.title
+    fun moduleMovieBind(context: Context, movie: Movie, listener: OnItemClickListener) {
+        itemView.movieNameModule.text = movie.title
         Glide.with(context).load(movie.poster_path).placeholder(R.drawable.load)
             .into(itemView.moduleImg)
+        itemView.setOnClickListener {
+            listener.onItemClick(movie)
+        }
     }
 
-    fun streamMovieBind(context: Context, movie:Movie) {
-        itemView.movieNameStream.text=movie.title
+    fun streamMovieBind(context: Context, movie: Movie, listener: OnItemClickListener) {
+        itemView.movieNameStream.text = movie.title
         Glide.with(context).load(movie.poster_path).placeholder(R.drawable.load)
             .into(itemView.streamImg)
+        itemView.setOnClickListener {
+            listener.onItemClick(movie)
+        }
     }
+
 
 }
