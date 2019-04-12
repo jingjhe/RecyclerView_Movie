@@ -21,6 +21,35 @@ dependencies {
 2. Customize adapter
 3. Item animation
 
+MyActivity
+```
+class MainActivity : AppCompatActivity() {
+
+   override fun onCreate(savedInstanceState: Bundle?) {
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        recyclerView.setHasFixedSize(true)
+        //connect layout manager
+        recyclerView.layoutManager = layoutManager
+        //specify an viewAdapter
+        recyclerView.adapter = ContactAdapter(this, arrayList, listType, listener)
+       
+     
+       recyclerView.apply {
+            //also do recyclerView setting here.
+            
+            //  setHasFixedSize(true)
+            //  layoutManager=layoutManager
+            //  adapter=adapter
+
+        }
+  }
+
+}
+```
+
+
+
 Create adapter
 ```
 class MyAdapter:RecyclerView.Adapter<MyAdapter.ViewHolder>(){
